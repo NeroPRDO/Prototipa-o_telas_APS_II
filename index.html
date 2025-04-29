@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gerenciamento de Restaurante</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <h1>Restaurante</h1>
+            </div>
+            <div class="login-form">
+                <h2>Login</h2>
+                <div class="input-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" placeholder="Digite seu usuário">
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha">
+                </div>
+                <div class="input-group">
+                    <label for="profile">Perfil</label>
+                    <select id="profile">
+                        <option value="waiter">Garçom</option>
+                        <option value="kitchen">Cozinha</option>
+                        <option value="bar">Barman</option>
+                        <option value="cashier">Caixa</option>
+                        <option value="manager">Gerente</option>
+                        <option value="receptionist">Recepcionista</option>
+                    </select>
+                </div>
+                <button id="login-btn" class="btn primary-btn">Entrar</button>
+                <div class="qr-login">
+                    <p>Ou faça login com QR Code</p>
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela Principal do Garçom (Mapa de Mesas) -->
+    <div id="waiter-screen" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fas fa-bars menu-toggle"></i>
+                <h1>Mapa de Mesas</h1>
+            </div>
+            <div class="header-right">
+                <span class="user-info">Olá, <span id="user-name">Carlos</span></span>
+                <button class="btn icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="btn icon-btn logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>RestaurantePRO</span>
+                </div>
+                <i class="fas fa-times sidebar-close"></i>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active"><i class="fas fa-th"></i> Mapa de Mesas</li>
+                <li><i class="fas fa-clipboard-list"></i> Pedidos</li>
+                <li><i class="fas fa-history"></i> Histórico</li>
+                <li><i class="fas fa-cog"></i> Configurações</li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label>Filtrar por status:</label>
+                    <div class="status-filters">
+                        <button class="status-filter active" data-status="all">Todas</button>
+                        <button class="status-filter" data-status="free">Livres</button>
+                        <button class="status-filter" data-status="occupied">Ocupadas</button>
+                        <button class="status-filter" data-status="waiting">Aguardando</button>
+                        <button class="status-filter" data-status="cleaning">Em Limpeza</button>
+                        <button class="status-filter" data-status="reserved">Reservadas</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>Setor:</label>
+                    <select id="sector-filter">
+                        <option value="all">Todos</option>
+                        <option value="main">Principal</option>
+                        <option value="terrace">Terraço</option>
+                        <option value="vip">VIP</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button class="btn secondary-btn" id="add-table-btn">
+                        <i class="fas fa-plus"></i> Adicionar Mesa
+                    </button>
+                </div>
+            </div>
+
+            <div class="tables-map">
+                <div class="table-item" data-table-id="1" data-status="free" data-capacity="4">
+                    <div class="table-number">1</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                        <div class="table-status">Livre</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="2" data-status="occupied" data-capacity="2">
+                    <div class="table-number">2</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 2</div>
+                        <div class="table-status">Ocupada</div>
+                        <div class="table-time">00:32</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="3" data-status="waiting" data-capacity="6">
+                    <div class="table-number">3</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 6</div>
+                        <div class="table-status">Aguardando Pedido</div>
+                        <div class="table-time">00:05</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="4" data-status="cleaning" data-capacity="4">
+                    <div class="table-number">4</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                        <div class="table-status">Em Limpeza</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="5" data-status="reserved" data-capacity="8">
+                    <div class="table-number">5</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 8</div>
+                        <div class="table-status">Reservada</div>
+                        <div class="table-time">19:30</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="6" data-status="free" data-capacity="4">
+                    <div class="table-number">6</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                        <div class="table-status">Livre</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="7" data-status="occupied" data-capacity="2">
+                    <div class="table-number">7</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 2</div>
+                        <div class="table-status">Ocupada</div>
+                        <div class="table-time">01:15</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="8" data-status="free" data-capacity="4">
+                    <div class="table-number">8</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                        <div class="table-status">Livre</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="9" data-status="free" data-capacity="6">
+                    <div class="table-number">9</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 6</div>
+                        <div class="table-status">Livre</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="10" data-status="occupied" data-capacity="4">
+                    <div class="table-number">10</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                        <div class="table-status">Ocupada</div>
+                        <div class="table-time">00:47</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="11" data-status="waiting" data-capacity="2">
+                    <div class="table-number">11</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 2</div>
+                        <div class="table-status">Aguardando Pedido</div>
+                        <div class="table-time">00:08</div>
+                    </div>
+                </div>
+                <div class="table-item" data-table-id="12" data-status="free" data-capacity="4">
+                    <div class="table-number">12</div>
+                    <div class="table-info">
+                        <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                        <div class="table-status">Livre</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tela de Pedido da Mesa -->
+    <div id="table-order-screen" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <button class="btn icon-btn back-btn"><i class="fas fa-arrow-left"></i></button>
+                <h1>Mesa <span id="current-table-number">3</span></h1>
+            </div>
+            <div class="header-right">
+                <span class="table-timer">00:32</span>
+                <button class="btn icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="btn icon-btn logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="order-header">
+                <div class="order-info">
+                    <div class="info-item">
+                        <span class="label">Garçom:</span>
+                        <span class="value">Carlos</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Clientes:</span>
+                        <span class="value">4 pessoas</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Status:</span>
+                        <span class="value status-waiting">Aguardando Pedido</span>
+                    </div>
+                </div>
+                <div class="order-actions">
+                    <button class="btn secondary-btn" id="change-status-btn">
+                        <i class="fas fa-exchange-alt"></i> Alterar Status
+                    </button>
+                    <button class="btn primary-btn" id="request-bill-btn">
+                        <i class="fas fa-file-invoice-dollar"></i> Solicitar Conta
+                    </button>
+                </div>
+            </div>
+
+            <div class="order-content">
+                <div class="order-categories">
+                    <button class="category-btn active" data-category="all">Todos</button>
+                    <button class="category-btn" data-category="starters">Entradas</button>
+                    <button class="category-btn" data-category="main">Pratos Principais</button>
+                    <button class="category-btn" data-category="drinks">Bebidas</button>
+                    <button class="category-btn" data-category="desserts">Sobremesas</button>
+                </div>
+
+                <div class="order-items-container">
+                    <div class="menu-items">
+                        <h3>Cardápio</h3>
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Buscar item...">
+                        </div>
+                        <div class="menu-items-list">
+                            <div class="menu-item" data-item-id="1" data-category="starters">
+                                <div class="item-info">
+                                    <h4>Bruschetta</h4>
+                                    <p>Tomate, manjericão e azeite</p>
+                                    <span class="item-price">R$ 28,00</span>
+                                </div>
+                                <button class="btn add-item-btn"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="menu-item" data-item-id="2" data-category="main">
+                                <div class="item-info">
+                                    <h4>Filé Mignon</h4>
+                                    <p>Com molho de vinho e batatas</p>
+                                    <span class="item-price">R$ 68,00</span>
+                                </div>
+                                <button class="btn add-item-btn"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="menu-item" data-item-id="3" data-category="drinks">
+                                <div class="item-info">
+                                    <h4>Caipirinha</h4>
+                                    <p>Limão, açúcar e cachaça</p>
+                                    <span class="item-price">R$ 22,00</span>
+                                </div>
+                                <button class="btn add-item-btn"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="menu-item" data-item-id="4" data-category="desserts">
+                                <div class="item-info">
+                                    <h4>Pudim</h4>
+                                    <p>Pudim de leite condensado</p>
+                                    <span class="item-price">R$ 18,00</span>
+                                </div>
+                                <button class="btn add-item-btn"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="menu-item" data-item-id="5" data-category="drinks">
+                                <div class="item-info">
+                                    <h4>Água Mineral</h4>
+                                    <p>Com ou sem gás</p>
+                                    <span class="item-price">R$ 6,00</span>
+                                </div>
+                                <button class="btn add-item-btn"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="menu-item" data-item-id="6" data-category="main">
+                                <div class="item-info">
+                                    <h4>Risoto de Funghi</h4>
+                                    <p>Arroz arbóreo com cogumelos</p>
+                                    <span class="item-price">R$ 52,00</span>
+                                </div>
+                                <button class="btn add-item-btn"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-summary">
+                        <h3>Pedido da Mesa</h3>
+                        <div class="order-items-list">
+                            <div class="order-item" data-item-id="2">
+                                <div class="item-info">
+                                    <div class="item-quantity">
+                                        <button class="btn quantity-btn minus"><i class="fas fa-minus"></i></button>
+                                        <span>2</span>
+                                        <button class="btn quantity-btn plus"><i class="fas fa-plus"></i></button>
+                                    </div>
+                                    <div class="item-details">
+                                        <h4>Filé Mignon</h4>
+                                        <p class="item-status preparing">Em preparo</p>
+                                    </div>
+                                    <div class="item-actions">
+                                        <span class="item-price">R$ 136,00</span>
+                                        <button class="btn icon-btn delete-item"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                <div class="item-notes">
+                                    <i class="fas fa-comment"></i>
+                                    <span>Ponto médio, sem cebola</span>
+                                </div>
+                            </div>
+                            <div class="order-item" data-item-id="3">
+                                <div class="item-info">
+                                    <div class="item-quantity">
+                                        <button class="btn quantity-btn minus"><i class="fas fa-minus"></i></button>
+                                        <span>3</span>
+                                        <button class="btn quantity-btn plus"><i class="fas fa-plus"></i></button>
+                                    </div>
+                                    <div class="item-details">
+                                        <h4>Caipirinha</h4>
+                                        <p class="item-status ready">Pronto</p>
+                                    </div>
+                                    <div class="item-actions">
+                                        <span class="item-price">R$ 66,00</span>
+                                        <button class="btn icon-btn delete-item"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                <div class="item-notes">
+                                    <i class="fas fa-comment"></i>
+                                    <span>Uma sem açúcar</span>
+                                </div>
+                            </div>
+                            <div class="order-item" data-item-id="1">
+                                <div class="item-info">
+                                    <div class="item-quantity">
+                                        <button class="btn quantity-btn minus"><i class="fas fa-minus"></i></button>
+                                        <span>1</span>
+                                        <button class="btn quantity-btn plus"><i class="fas fa-plus"></i></button>
+                                    </div>
+                                    <div class="item-details">
+                                        <h4>Bruschetta</h4>
+                                        <p class="item-status delivered">Entregue</p>
+                                    </div>
+                                    <div class="item-actions">
+                                        <span class="item-price">R$ 28,00</span>
+                                        <button class="btn icon-btn delete-item"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="add-note">
+                            <i class="fas fa-comment"></i>
+                            <input type="text" placeholder="Adicionar observação ao pedido...">
+                        </div>
+
+                        <div class="order-total">
+                            <div class="subtotal">
+                                <span>Subtotal:</span>
+                                <span>R$ 230,00</span>
+                            </div>
+                            <div class="service">
+                                <span>Taxa de Serviço (10%):</span>
+                                <span>R$ 23,00</span>
+                            </div>
+                            <div class="total">
+                                <span>Total:</span>
+                                <span>R$ 253,00</span>
+                            </div>
+                        </div>
+
+                        <div class="order-actions">
+                            <button class="btn secondary-btn" id="save-order-btn">
+                                <i class="fas fa-save"></i> Salvar Pedido
+                            </button>
+                            <button class="btn primary-btn" id="send-order-btn">
+                                <i class="fas fa-paper-plane"></i> Enviar para Cozinha/Bar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tela da Cozinha -->
+    <div id="kitchen-screen" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fas fa-bars menu-toggle"></i>
+                <h1>Cozinha</h1>
+            </div>
+            <div class="header-right">
+                <span class="user-info">Olá, <span id="kitchen-user-name">Ana</span></span>
+                <button class="btn icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="btn icon-btn logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>RestaurantePRO</span>
+                </div>
+                <i class="fas fa-times sidebar-close"></i>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active"><i class="fas fa-clipboard-list"></i> Pedidos</li>
+                <li><i class="fas fa-history"></i> Histórico</li>
+                <li><i class="fas fa-cog"></i> Configurações</li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label>Filtrar por:</label>
+                    <div class="status-filters">
+                        <button class="status-filter active" data-status="all">Todos</button>
+                        <button class="status-filter" data-status="new">Novos</button>
+                        <button class="status-filter" data-status="preparing">Em Preparo</button>
+                        <button class="status-filter" data-status="ready">Prontos</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>Categoria:</label>
+                    <select id="kitchen-category-filter">
+                        <option value="all">Todas</option>
+                        <option value="starters">Entradas</option>
+                        <option value="main">Pratos Principais</option>
+                        <option value="desserts">Sobremesas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="kitchen-board">
+                <div class="board-column" data-status="new">
+                    <div class="column-header">
+                        <h3>Novos Pedidos</h3>
+                        <span class="count">2</span>
+                    </div>
+                    <div class="column-content">
+                        <div class="kitchen-card" data-order-id="1001">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 3</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:03</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">2x</div>
+                                    <div class="item-details">
+                                        <h4>Risoto de Funghi</h4>
+                                        <p class="item-notes">Um sem queijo</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="start-preparing">
+                                    <i class="fas fa-play"></i> Iniciar Preparo
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="kitchen-card" data-order-id="1002">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 7</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:01</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">1x</div>
+                                    <div class="item-details">
+                                        <h4>Bruschetta</h4>
+                                    </div>
+                                </div>
+                                <div class="order-item">
+                                    <div class="item-quantity">1x</div>
+                                    <div class="item-details">
+                                        <h4>Salada Caesar</h4>
+                                        <p class="item-notes">Sem croutons</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="start-preparing">
+                                    <i class="fas fa-play"></i> Iniciar Preparo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board-column" data-status="preparing">
+                    <div class="column-header">
+                        <h3>Em Preparo</h3>
+                        <span class="count">3</span>
+                    </div>
+                    <div class="column-content">
+                        <div class="kitchen-card" data-order-id="1003">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 10</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:12</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">2x</div>
+                                    <div class="item-details">
+                                        <h4>Filé Mignon</h4>
+                                        <p class="item-notes">Ponto médio, sem cebola</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="mark-ready">
+                                    <i class="fas fa-check"></i> Marcar como Pronto
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="kitchen-card" data-order-id="1004">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 2</span>
+                                </div>
+                                <div class="time-info urgent">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:18</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">1x</div>
+                                    <div class="item-details">
+                                        <h4>Salmão Grelhado</h4>
+                                        <p class="item-notes">Sem molho</p>
+                                    </div>
+                                </div>
+                                <div class="order-item">
+                                    <div class="item-quantity">1x</div>
+                                    <div class="item-details">
+                                        <h4>Risoto de Limão</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="mark-ready">
+                                    <i class="fas fa-check"></i> Marcar como Pronto
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="kitchen-card" data-order-id="1005">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 11</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:08</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">4x</div>
+                                    <div class="item-details">
+                                        <h4>Ravioli de Queijo</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="mark-ready">
+                                    <i class="fas fa-check"></i> Marcar como Pronto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board-column" data-status="ready">
+                    <div class="column-header">
+                        <h3>Prontos para Entrega</h3>
+                        <span class="count">2</span>
+                    </div>
+                    <div class="column-content">
+                        <div class="kitchen-card" data-order-id="1006">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 5</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:22</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">2x</div>
+                                    <div class="item-details">
+                                        <h4>Pudim</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="mark-delivered">
+                                    <i class="fas fa-check-double"></i> Marcar como Entregue
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="kitchen-card" data-order-id="1007">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 3</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:15</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">1x</div>
+                                    <div class="item-details">
+                                        <h4>Bruschetta</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="mark-delivered">
+                                    <i class="fas fa-check-double"></i> Marcar como Entregue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tela do Bar/Barman -->
+    <div id="bar-screen" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fas fa-bars menu-toggle"></i>
+                <h1>Bar</h1>
+            </div>
+            <div class="header-right">
+                <span class="user-info">Olá, <span id="bar-user-name">Pedro</span></span>
+                <button class="btn icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="btn icon-btn logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>RestaurantePRO</span>
+                </div>
+                <i class="fas fa-times sidebar-close"></i>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active"><i class="fas fa-clipboard-list"></i> Pedidos</li>
+                <li><i class="fas fa-history"></i> Histórico</li>
+                <li><i class="fas fa-cog"></i> Configurações</li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label>Filtrar por:</label>
+                    <div class="status-filters">
+                        <button class="status-filter active" data-status="all">Todos</button>
+                        <button class="status-filter" data-status="new">Novos</button>
+                        <button class="status-filter" data-status="preparing">Em Preparo</button>
+                        <button class="status-filter" data-status="ready">Prontos</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>Categoria:</label>
+                    <select id="bar-category-filter">
+                        <option value="all">Todas</option>
+                        <option value="alcoholic">Alcoólicas</option>
+                        <option value="non-alcoholic">Não Alcoólicas</option>
+                        <option value="cocktails">Coquetéis</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bar-board">
+                <div class="board-column" data-status="new">
+                    <div class="column-header">
+                        <h3>Novos Pedidos</h3>
+                        <span class="count">2</span>
+                    </div>
+                    <div class="column-content">
+                        <div class="bar-card" data-order-id="2001">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 3</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:02</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">2x</div>
+                                    <div class="item-details">
+                                        <h4>Mojito</h4>
+                                        <p class="item-notes">Um sem álcool</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="start-preparing">
+                                    <i class="fas fa-play"></i> Iniciar Preparo
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bar-card" data-order-id="2002">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 7</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:01</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">4x</div>
+                                    <div class="item-details">
+                                        <h4>Água Mineral</h4>
+                                        <p class="item-notes">2 com gás, 2 sem gás</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="start-preparing">
+                                    <i class="fas fa-play"></i> Iniciar Preparo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board-column" data-status="preparing">
+                    <div class="column-header">
+                        <h3>Em Preparo</h3>
+                        <span class="count">1</span>
+                    </div>
+                    <div class="column-content">
+                        <div class="bar-card" data-order-id="2003">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 10</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:04</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">3x</div>
+                                    <div class="item-details">
+                                        <h4>Caipirinha</h4>
+                                        <p class="item-notes">Uma sem açúcar</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="mark-ready">
+                                    <i class="fas fa-check"></i> Marcar como Pronto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="board-column" data-status="ready">
+                    <div class="column-header">
+                        <h3>Prontos para Entrega</h3>
+                        <span class="count">1</span>
+                    </div>
+                    <div class="column-content">
+                        <div class="bar-card" data-order-id="2004">
+                            <div class="card-header">
+                                <div class="table-info">
+                                    <i class="fas fa-table"></i>
+                                    <span>Mesa 5</span>
+                                </div>
+                                <div class="time-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>00:08</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="order-item">
+                                    <div class="item-quantity">2x</div>
+                                    <div class="item-details">
+                                        <h4>Vinho Tinto</h4>
+                                        <p class="item-notes">Cabernet Sauvignon</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn secondary-btn" data-action="view-details">
+                                    <i class="fas fa-eye"></i> Detalhes
+                                </button>
+                                <button class="btn primary-btn" data-action="mark-delivered">
+                                    <i class="fas fa-check-double"></i> Marcar como Entregue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tela de Pagamento/Caixa -->
+    <div id="cashier-screen" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fas fa-bars menu-toggle"></i>
+                <h1>Caixa</h1>
+            </div>
+            <div class="header-right">
+                <span class="user-info">Olá, <span id="cashier-user-name">Mariana</span></span>
+                <button class="btn icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="btn icon-btn logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>RestaurantePRO</span>
+                </div>
+                <i class="fas fa-times sidebar-close"></i>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active"><i class="fas fa-cash-register"></i> Pagamentos</li>
+                <li><i class="fas fa-history"></i> Histórico</li>
+                <li><i class="fas fa-file-invoice-dollar"></i> Relatórios</li>
+                <li><i class="fas fa-cog"></i> Configurações</li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="cashier-container">
+                <div class="tables-pending">
+                    <h3>Mesas Pendentes</h3>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar mesa...">
+                    </div>
+                    <div class="tables-list">
+                        <div class="table-item active" data-table-id="3">
+                            <div class="table-number">Mesa 3</div>
+                            <div class="table-info">
+                                <div class="table-time">00:45</div>
+                                <div class="table-total">R$ 253,00</div>
+                            </div>
+                        </div>
+                        <div class="table-item" data-table-id="7">
+                            <div class="table-number">Mesa 7</div>
+                            <div class="table-info">
+                                <div class="table-time">01:20</div>
+                                <div class="table-total">R$ 187,50</div>
+                            </div>
+                        </div>
+                        <div class="table-item" data-table-id="10">
+                            <div class="table-number">Mesa 10</div>
+                            <div class="table-info">
+                                <div class="table-time">00:52</div>
+                                <div class="table-total">R$ 342,00</div>
+                            </div>
+                        </div>
+                        <div class="table-item" data-table-id="2">
+                            <div class="table-number">Mesa 2</div>
+                            <div class="table-info">
+                                <div class="table-time">00:38</div>
+                                <div class="table-total">R$ 124,00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-details">
+                    <div class="payment-header">
+                        <h3>Mesa 3 - Detalhes do Pagamento</h3>
+                        <div class="payment-info">
+                            <div class="info-item">
+                                <span class="label">Garçom:</span>
+                                <span class="value">Carlos</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Tempo:</span>
+                                <span class="value">00:45</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Clientes:</span>
+                                <span class="value">4 pessoas</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-items">
+                        <h4>Itens Consumidos</h4>
+                        <div class="order-items-list">
+                            <div class="order-item">
+                                <div class="item-quantity">2x</div>
+                                <div class="item-details">
+                                    <h4>Filé Mignon</h4>
+                                    <p class="item-notes">Ponto médio, sem cebola</p>
+                                </div>
+                                <div class="item-price">R$ 136,00</div>
+                            </div>
+                            <div class="order-item">
+                                <div class="item-quantity">3x</div>
+                                <div class="item-details">
+                                    <h4>Caipirinha</h4>
+                                    <p class="item-notes">Uma sem açúcar</p>
+                                </div>
+                                <div class="item-price">R$ 66,00</div>
+                            </div>
+                            <div class="order-item">
+                                <div class="item-quantity">1x</div>
+                                <div class="item-details">
+                                    <h4>Bruschetta</h4>
+                                </div>
+                                <div class="item-price">R$ 28,00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-options">
+                        <div class="payment-summary">
+                            <div class="subtotal">
+                                <span>Subtotal:</span>
+                                <span>R$ 230,00</span>
+                            </div>
+                            <div class="service">
+                                <span>Taxa de Serviço (10%):</span>
+                                <span>R$ 23,00</span>
+                            </div>
+                            <div class="discount">
+                                <span>Desconto:</span>
+                                <div class="discount-input">
+                                    <input type="number" value="0" min="0">
+                                    <select>
+                                        <option value="percentage">%</option>
+                                        <option value="fixed">R$</option>
+                                    </select>
+                                    <button class="btn secondary-btn">Aplicar</button>
+                                </div>
+                            </div>
+                            <div class="total">
+                                <span>Total:</span>
+                                <span>R$ 253,00</span>
+                            </div>
+                        </div>
+
+                        <div class="payment-methods">
+                            <h4>Método de Pagamento</h4>
+                            <div class="payment-method-options">
+                                <button class="payment-method-btn active" data-method="credit">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Cartão de Crédito</span>
+                                </button>
+                                <button class="payment-method-btn" data-method="debit">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Cartão de Débito</span>
+                                </button>
+                                <button class="payment-method-btn" data-method="pix">
+                                    <i class="fas fa-qrcode"></i>
+                                    <span>PIX</span>
+                                </button>
+                                <button class="payment-method-btn" data-method="cash">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>Dinheiro</span>
+                                </button>
+                                <button class="payment-method-btn" data-method="split">
+                                    <i class="fas fa-users"></i>
+                                    <span>Dividir Conta</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="payment-actions">
+                            <button class="btn secondary-btn" id="print-bill-btn">
+                                <i class="fas fa-print"></i> Imprimir Conta
+                            </button>
+                            <button class="btn primary-btn" id="confirm-payment-btn">
+                                <i class="fas fa-check-circle"></i> Confirmar Pagamento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tela do Gerente/Admin (Dashboard) -->
+    <div id="manager-screen" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fas fa-bars menu-toggle"></i>
+                <h1>Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <span class="user-info">Olá, <span id="manager-user-name">Roberto</span></span>
+                <button class="btn icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="btn icon-btn logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>RestaurantePRO</span>
+                </div>
+                <i class="fas fa-times sidebar-close"></i>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active"><i class="fas fa-chart-line"></i> Dashboard</li>
+                <li><i class="fas fa-th"></i> Mapa de Mesas</li>
+                <li><i class="fas fa-users"></i> Funcionários</li>
+                <li><i class="fas fa-clipboard-list"></i> Cardápio</li>
+                <li><i class="fas fa-file-invoice-dollar"></i> Relatórios</li>
+                <li><i class="fas fa-cog"></i> Configurações</li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <div class="date-filter">
+                        <button class="btn secondary-btn active" data-period="today">Hoje</button>
+                        <button class="btn secondary-btn" data-period="week">Esta Semana</button>
+                        <button class="btn secondary-btn" data-period="month">Este Mês</button>
+                        <button class="btn secondary-btn" data-period="custom">Personalizado</button>
+                    </div>
+                    <div class="dashboard-actions">
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-print"></i> Imprimir
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Faturamento</h3>
+                            <div class="stat-value">R$ 5.842,00</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 12% em relação a ontem
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Clientes</h3>
+                            <div class="stat-value">87</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 5% em relação a ontem
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Pedidos</h3>
+                            <div class="stat-value">42</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 8% em relação a ontem
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Tempo Médio</h3>
+                            <div class="stat-value">32 min</div>
+                            <div class="stat-change negative">
+                                <i class="fas fa-arrow-up"></i> 3% em relação a ontem
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-charts">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Vendas por Hora</h3>
+                            <div class="chart-actions">
+                                <button class="btn icon-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <div class="chart-placeholder">
+                                <div class="bar-chart">
+                                    <div class="bar" style="height: 20%"><span>10h</span></div>
+                                    <div class="bar" style="height: 35%"><span>11h</span></div>
+                                    <div class="bar" style="height: 60%"><span>12h</span></div>
+                                    <div class="bar" style="height: 80%"><span>13h</span></div>
+                                    <div class="bar" style="height: 65%"><span>14h</span></div>
+                                    <div class="bar" style="height: 40%"><span>15h</span></div>
+                                    <div class="bar" style="height: 30%"><span>16h</span></div>
+                                    <div class="bar" style="height: 45%"><span>17h</span></div>
+                                    <div class="bar" style="height: 75%"><span>18h</span></div>
+                                    <div class="bar" style="height: 90%"><span>19h</span></div>
+                                    <div class="bar" style="height: 85%"><span>20h</span></div>
+                                    <div class="bar" style="height: 50%"><span>21h</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Itens Mais Vendidos</h3>
+                            <div class="chart-actions">
+                                <button class="btn icon-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <div class="top-items">
+                                <div class="top-item">
+                                    <div class="item-rank">1</div>
+                                    <div class="item-info">
+                                        <h4>Filé Mignon</h4>
+                                        <div class="item-progress">
+                                            <div class="progress-bar" style="width: 85%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item-value">32 un.</div>
+                                </div>
+                                <div class="top-item">
+                                    <div class="item-rank">2</div>
+                                    <div class="item-info">
+                                        <h4>Caipirinha</h4>
+                                        <div class="item-progress">
+                                            <div class="progress-bar" style="width: 70%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item-value">28 un.</div>
+                                </div>
+                                <div class="top-item">
+                                    <div class="item-rank">3</div>
+                                    <div class="item-info">
+                                        <h4>Risoto de Funghi</h4>
+                                        <div class="item-progress">
+                                            <div class="progress-bar" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item-value">24 un.</div>
+                                </div>
+                                <div class="top-item">
+                                    <div class="item-rank">4</div>
+                                    <div class="item-info">
+                                        <h4>Pudim</h4>
+                                        <div class="item-progress">
+                                            <div class="progress-bar" style="width: 45%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item-value">18 un.</div>
+                                </div>
+                                <div class="top-item">
+                                    <div class="item-rank">5</div>
+                                    <div class="item-info">
+                                        <h4>Água Mineral</h4>
+                                        <div class="item-progress">
+                                            <div class="progress-bar" style="width: 40%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="item-value">16 un.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-tables">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Desempenho dos Garçons</h3>
+                            <div class="table-actions">
+                                <button class="btn icon-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            </div>
+                        </div>
+                        <div class="table-content">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Garçom</th>
+                                        <th>Mesas</th>
+                                        <th>Pedidos</th>
+                                        <th>Tempo Médio</th>
+                                        <th>Avaliação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Carlos</td>
+                                        <td>12</td>
+                                        <td>28</td>
+                                        <td>28 min</td>
+                                        <td>4.8 <i class="fas fa-star"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Juliana</td>
+                                        <td>10</td>
+                                        <td>22</td>
+                                        <td>32 min</td>
+                                        <td>4.6 <i class="fas fa-star"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ricardo</td>
+                                        <td>8</td>
+                                        <td>18</td>
+                                        <td>35 min</td>
+                                        <td>4.3 <i class="fas fa-star"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Amanda</td>
+                                        <td>7</td>
+                                        <td>15</td>
+                                        <td>30 min</td>
+                                        <td>4.5 <i class="fas fa-star"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3>Status das Mesas</h3>
+                            <div class="table-actions">
+                                <button class="btn icon-btn"><i class="fas fa-ellipsis-v"></i></button>
+                            </div>
+                        </div>
+                        <div class="table-content">
+                            <div class="status-summary">
+                                <div class="status-item">
+                                    <div class="status-color free"></div>
+                                    <div class="status-label">Livres</div>
+                                    <div class="status-count">8</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-color occupied"></div>
+                                    <div class="status-label">Ocupadas</div>
+                                    <div class="status-count">6</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-color waiting"></div>
+                                    <div class="status-label">Aguardando</div>
+                                    <div class="status-count">2</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-color cleaning"></div>
+                                    <div class="status-label">Em Limpeza</div>
+                                    <div class="status-count">1</div>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-color reserved"></div>
+                                    <div class="status-label">Reservadas</div>
+                                    <div class="status-count">3</div>
+                                </div>
+                            </div>
+                            <div class="mini-map">
+                                <div class="mini-table free"></div>
+                                <div class="mini-table occupied"></div>
+                                <div class="mini-table free"></div>
+                                <div class="mini-table cleaning"></div>
+                                <div class="mini-table reserved"></div>
+                                <div class="mini-table free"></div>
+                                <div class="mini-table occupied"></div>
+                                <div class="mini-table free"></div>
+                                <div class="mini-table free"></div>
+                                <div class="mini-table occupied"></div>
+                                <div class="mini-table waiting"></div>
+                                <div class="mini-table free"></div>
+                                <div class="mini-table free"></div>
+                                <div class="mini-table occupied"></div>
+                                <div class="mini-table free"></div>
+                                <div class="mini-table occupied"></div>
+                                <div class="mini-table reserved"></div>
+                                <div class="mini-table waiting"></div>
+                                <div class="mini-table reserved"></div>
+                                <div class="mini-table occupied"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tela do Recepcionista -->
+    <div id="receptionist-screen" class="screen">
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fas fa-bars menu-toggle"></i>
+                <h1>Recepção</h1>
+            </div>
+            <div class="header-right">
+                <span class="user-info">Olá, <span id="receptionist-user-name">Luiza</span></span>
+                <button class="btn icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="btn icon-btn logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </header>
+
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>RestaurantePRO</span>
+                </div>
+                <i class="fas fa-times sidebar-close"></i>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active"><i class="fas fa-concierge-bell"></i> Recepção</li>
+                <li><i class="fas fa-calendar-alt"></i> Reservas</li>
+                <li><i class="fas fa-th"></i> Mapa de Mesas</li>
+                <li><i class="fas fa-history"></i> Histórico</li>
+                <li><i class="fas fa-cog"></i> Configurações</li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="receptionist-container">
+                <div class="waiting-list">
+                    <div class="waiting-header">
+                        <h3>Fila de Espera</h3>
+                        <button class="btn primary-btn" id="add-to-queue-btn">
+                            <i class="fas fa-plus"></i> Adicionar Cliente
+                        </button>
+                    </div>
+                    <div class="waiting-content">
+                        <div class="waiting-item" data-queue-id="1">
+                            <div class="waiting-info">
+                                <div class="customer-name">Silva</div>
+                                <div class="customer-details">
+                                    <span><i class="fas fa-users"></i> 4 pessoas</span>
+                                    <span><i class="fas fa-clock"></i> 00:18</span>
+                                </div>
+                            </div>
+                            <div class="waiting-actions">
+                                <button class="btn secondary-btn" data-action="edit-customer">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn primary-btn" data-action="allocate-table">
+                                    <i class="fas fa-chair"></i> Alocar Mesa
+                                </button>
+                            </div>
+                        </div>
+                        <div class="waiting-item" data-queue-id="2">
+                            <div class="waiting-info">
+                                <div class="customer-name">Oliveira</div>
+                                <div class="customer-details">
+                                    <span><i class="fas fa-users"></i> 2 pessoas</span>
+                                    <span><i class="fas fa-clock"></i> 00:12</span>
+                                </div>
+                            </div>
+                            <div class="waiting-actions">
+                                <button class="btn secondary-btn" data-action="edit-customer">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn primary-btn" data-action="allocate-table">
+                                    <i class="fas fa-chair"></i> Alocar Mesa
+                                </button>
+                            </div>
+                        </div>
+                        <div class="waiting-item" data-queue-id="3">
+                            <div class="waiting-info">
+                                <div class="customer-name">Santos</div>
+                                <div class="customer-details">
+                                    <span><i class="fas fa-users"></i> 6 pessoas</span>
+                                    <span><i class="fas fa-clock"></i> 00:05</span>
+                                </div>
+                            </div>
+                            <div class="waiting-actions">
+                                <button class="btn secondary-btn" data-action="edit-customer">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn primary-btn" data-action="allocate-table">
+                                    <i class="fas fa-chair"></i> Alocar Mesa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tables-availability">
+                    <div class="availability-header">
+                        <h3>Disponibilidade de Mesas</h3>
+                        <div class="filter-group">
+                            <label>Filtrar por:</label>
+                            <div class="status-filters">
+                                <button class="status-filter active" data-status="free">Livres</button>
+                                <button class="status-filter" data-status="all">Todas</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="availability-content">
+                        <div class="tables-map">
+                            <div class="table-item" data-table-id="1" data-status="free" data-capacity="4">
+                                <div class="table-number">1</div>
+                                <div class="table-info">
+                                    <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                                    <div class="table-status">Livre</div>
+                                </div>
+                            </div>
+                            <div class="table-item" data-table-id="6" data-status="free" data-capacity="4">
+                                <div class="table-number">6</div>
+                                <div class="table-info">
+                                    <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                                    <div class="table-status">Livre</div>
+                                </div>
+                            </div>
+                            <div class="table-item" data-table-id="8" data-status="free" data-capacity="4">
+                                <div class="table-number">8</div>
+                                <div class="table-info">
+                                    <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                                    <div class="table-status">Livre</div>
+                                </div>
+                            </div>
+                            <div class="table-item" data-table-id="9" data-status="free" data-capacity="6">
+                                <div class="table-number">9</div>
+                                <div class="table-info">
+                                    <div class="table-capacity"><i class="fas fa-user"></i> 6</div>
+                                    <div class="table-status">Livre</div>
+                                </div>
+                            </div>
+                            <div class="table-item" data-table-id="12" data-status="free" data-capacity="4">
+                                <div class="table-number">12</div>
+                                <div class="table-info">
+                                    <div class="table-capacity"><i class="fas fa-user"></i> 4</div>
+                                    <div class="table-status">Livre</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="allocation-panel">
+                    <div class="allocation-header">
+                        <h3>Alocação de Mesa</h3>
+                    </div>
+                    <div class="allocation-content">
+                        <div class="customer-selection">
+                            <label>Cliente:</label>
+                            <select id="customer-select">
+                                <option value="1">Silva (4 pessoas)</option>
+                                <option value="2">Oliveira (2 pessoas)</option>
+                                <option value="3">Santos (6 pessoas)</option>
+                            </select>
+                        </div>
+                        <div class="table-selection">
+                            <label>Mesa:</label>
+                            <select id="table-select">
+                                <option value="9">Mesa 9 (6 lugares)</option>
+                                <option value="1">Mesa 1 (4 lugares)</option>
+                                <option value="6">Mesa 6 (4 lugares)</option>
+                                <option value="8">Mesa 8 (4 lugares)</option>
+                                <option value="12">Mesa 12 (4 lugares)</option>
+                            </select>
+                        </div>
+                        <div class="allocation-options">
+                            <div class="option-group">
+                                <label>Garçom:</label>
+                                <select id="waiter-select">
+                                    <option value="1">Carlos</option>
+                                    <option value="2">Juliana</option>
+                                    <option value="3">Ricardo</option>
+                                    <option value="4">Amanda</option>
+                                </select>
+                            </div>
+                            <div class="option-group">
+                                <label>Observações:</label>
+                                <textarea placeholder="Adicionar observações..."></textarea>
+                            </div>
+                        </div>
+                        <div class="allocation-actions">
+                            <button class="btn secondary-btn" id="cancel-allocation-btn">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button class="btn primary-btn" id="confirm-allocation-btn">
+                                <i class="fas fa-check"></i> Confirmar Alocação
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modais -->
+    <div id="modal-overlay" class="modal-overlay">
+        <!-- Modal de Adicionar Mesa -->
+        <div id="add-table-modal" class="modal">
+            <div class="modal-header">
+                <h3>Adicionar Nova Mesa</h3>
+                <button class="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label for="table-number">Número da Mesa:</label>
+                    <input type="number" id="table-number" min="1" value="13">
+                </div>
+                <div class="form-group">
+                    <label for="table-capacity">Capacidade:</label>
+                    <input type="number" id="table-capacity" min="1" value="4">
+                </div>
+                <div class="form-group">
+                    <label for="table-sector">Setor:</label>
+                    <select id="table-sector">
+                        <option value="main">Principal</option>
+                        <option value="terrace">Terraço</option>
+                        <option value="vip">VIP</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="table-status">Status Inicial:</label>
+                    <select id="table-status">
+                        <option value="free">Livre</option>
+                        <option value="reserved">Reservada</option>
+                        <option value="blocked">Bloqueada</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancel-add-table">Cancelar</button>
+                <button class="btn primary-btn" id="confirm-add-table">Adicionar Mesa</button>
+            </div>
+        </div>
+
+        <!-- Modal de Alterar Status da Mesa -->
+        <div id="change-status-modal" class="modal">
+            <div class="modal-header">
+                <h3>Alterar Status da Mesa 3</h3>
+                <button class="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="status-options">
+                    <div class="status-option" data-status="free">
+                        <div class="status-color free"></div>
+                        <div class="status-label">Livre</div>
+                    </div>
+                    <div class="status-option" data-status="occupied">
+                        <div class="status-color occupied"></div>
+                        <div class="status-label">Ocupada</div>
+                    </div>
+                    <div class="status-option active" data-status="waiting">
+                        <div class="status-color waiting"></div>
+                        <div class="status-label">Aguardando Pedido</div>
+                    </div>
+                    <div class="status-option" data-status="cleaning">
+                        <div class="status-color cleaning"></div>
+                        <div class="status-label">Em Limpeza</div>
+                    </div>
+                    <div class="status-option" data-status="reserved">
+                        <div class="status-color reserved"></div>
+                        <div class="status-label">Reservada</div>
+                    </div>
+                    <div class="status-option" data-status="blocked">
+                        <div class="status-color blocked"></div>
+                        <div class="status-label">Bloqueada</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="status-note">Observação:</label>
+                    <textarea id="status-note" placeholder="Adicionar observação sobre a mudança de status..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancel-status-change">Cancelar</button>
+                <button class="btn primary-btn" id="confirm-status-change">Confirmar Alteração</button>
+            </div>
+        </div>
+
+        <!-- Modal de Juntar Mesas -->
+        <div id="join-tables-modal" class="modal">
+            <div class="modal-header">
+                <h3>Juntar Mesas</h3>
+                <button class="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label>Mesa Principal:</label>
+                    <select id="main-table">
+                        <option value="3">Mesa 3 (6 lugares)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Mesas Adicionais:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="table-1" value="1">
+                            <label for="table-1">Mesa 1 (4 lugares)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="table-6" value="6">
+                            <label for="table-6">Mesa 6 (4 lugares)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="table-8" value="8">
+                            <label for="table-8">Mesa 8 (4 lugares)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Capacidade Total:</label>
+                    <div class="capacity-display">
+                        <i class="fas fa-users"></i> <span id="total-capacity">6</span> lugares
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Número de Clientes:</label>
+                    <input type="number" id="customer-count" min="1" value="8">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancel-join-tables">Cancelar</button>
+                <button class="btn primary-btn" id="confirm-join-tables">Juntar Mesas</button>
+            </div>
+        </div>
+
+        <!-- Modal de Adicionar Cliente à Fila -->
+        <div id="add-customer-modal" class="modal">
+            <div class="modal-header">
+                <h3>Adicionar Cliente à Fila</h3>
+                <button class="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="form-group">
+                    <label for="customer-name">Nome:</label>
+                    <input type="text" id="customer-name" placeholder="Nome do cliente">
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Telefone:</label>
+                    <input type="tel" id="customer-phone" placeholder="(00) 00000-0000">
+                </div>
+                <div class="form-group">
+                    <label for="customer-people">Número de Pessoas:</label>
+                    <input type="number" id="customer-people" min="1" value="2">
+                </div>
+                <div class="form-group">
+                    <label for="customer-notes">Observações:</label>
+                    <textarea id="customer-notes" placeholder="Preferências, restrições alimentares, etc."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancel-add-customer">Cancelar</button>
+                <button class="btn primary-btn" id="confirm-add-customer">Adicionar à Fila</button>
+            </div>
+        </div>
+
+        <!-- Modal de Dividir Conta -->
+        <div id="split-bill-modal" class="modal">
+            <div class="modal-header">
+                <h3>Dividir Conta - Mesa 3</h3>
+                <button class="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="split-options">
+                    <div class="split-option active" data-split="equal">
+                        <i class="fas fa-equals"></i>
+                        <span>Dividir Igualmente</span>
+                    </div>
+                    <div class="split-option" data-split="items">
+                        <i class="fas fa-list"></i>
+                        <span>Dividir por Item</span>
+                    </div>
+                    <div class="split-option" data-split="custom">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Valor Personalizado</span>
+                    </div>
+                </div>
+
+                <div class="split-equal-section">
+                    <div class="form-group">
+                        <label for="split-people">Número de Pessoas:</label>
+                        <input type="number" id="split-people" min="2" value="4">
+                    </div>
+                    <div class="split-summary">
+                        <div class="total-amount">Total: R$ 253,00</div>
+                        <div class="per-person">Por pessoa: R$ 63,25</div>
+                    </div>
+                </div>
+
+                <div class="split-items-section" style="display: none;">
+                    <div class="split-items-list">
+                        <div class="split-item">
+                            <div class="item-info">
+                                <h4>Filé Mignon (2x)</h4>
+                                <span class="item-price">R$ 136,00</span>
+                            </div>
+                            <div class="item-assignment">
+                                <select>
+                                    <option value="all">Todos</option>
+                                    <option value="person1">Pessoa 1</option>
+                                    <option value="person2">Pessoa 2</option>
+                                    <option value="person3">Pessoa 3</option>
+                                    <option value="person4">Pessoa 4</option>
+                                    <option value="custom">Personalizado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="split-item">
+                            <div class="item-info">
+                                <h4>Caipirinha (3x)</h4>
+                                <span class="item-price">R$ 66,00</span>
+                            </div>
+                            <div class="item-assignment">
+                                <select>
+                                    <option value="all">Todos</option>
+                                    <option value="person1">Pessoa 1</option>
+                                    <option value="person2">Pessoa 2</option>
+                                    <option value="person3">Pessoa 3</option>
+                                    <option value="person4">Pessoa 4</option>
+                                    <option value="custom">Personalizado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="split-item">
+                            <div class="item-info">
+                                <h4>Bruschetta (1x)</h4>
+                                <span class="item-price">R$ 28,00</span>
+                            </div>
+                            <div class="item-assignment">
+                                <select>
+                                    <option value="all">Todos</option>
+                                    <option value="person1">Pessoa 1</option>
+                                    <option value="person2">Pessoa 2</option>
+                                    <option value="person3">Pessoa 3</option>
+                                    <option value="person4">Pessoa 4</option>
+                                    <option value="custom">Personalizado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="split-item">
+                            <div class="item-info">
+                                <h4>Taxa de Serviço (10%)</h4>
+                                <span class="item-price">R$ 23,00</span>
+                            </div>
+                            <div class="item-assignment">
+                                <select>
+                                    <option value="all">Todos</option>
+                                    <option value="person1">Pessoa 1</option>
+                                    <option value="person2">Pessoa 2</option>
+                                    <option value="person3">Pessoa 3</option>
+                                    <option value="person4">Pessoa 4</option>
+                                    <option value="custom">Personalizado</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="split-custom-section" style="display: none;">
+                    <div class="custom-split-list">
+                        <div class="custom-split-item">
+                            <label>Pessoa 1:</label>
+                            <input type="number" min="0" value="63.25">
+                        </div>
+                        <div class="custom-split-item">
+                            <label>Pessoa 2:</label>
+                            <input type="number" min="0" value="63.25">
+                        </div>
+                        <div class="custom-split-item">
+                            <label>Pessoa 3:</label>
+                            <input type="number" min="0" value="63.25">
+                        </div>
+                        <div class="custom-split-item">
+                            <label>Pessoa 4:</label>
+                            <input type="number" min="0" value="63.25">
+                        </div>
+                    </div>
+                    <div class="split-summary">
+                        <div class="total-amount">Total: R$ 253,00</div>
+                        <div class="remaining">Restante: R$ 0,00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancel-split-bill">Cancelar</button>
+                <button class="btn primary-btn" id="confirm-split-bill">Confirmar Divisão</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
